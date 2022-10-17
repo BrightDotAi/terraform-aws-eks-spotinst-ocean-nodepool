@@ -41,8 +41,9 @@ resource "spotinst_ocean_aws" "this" {
   }
 
   autoscaler {
-    autoscale_is_enabled     = true
-    autoscale_is_auto_config = true
+    autoscale_is_enabled                 = var.autoscale_is_enabled
+    autoscale_is_auto_config             = var.autoscale_is_auto_config
+    enable_automatic_and_manual_headroom = var.enable_automatic_and_manual_headroom
   }
 
   update_policy {

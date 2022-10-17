@@ -228,3 +228,21 @@ variable "update_policy_batch_size_percentage" {
   default     = 25
   description = "When rolling the cluster due to an update, the percentage of the instances to deploy in each batch."
 }
+
+variable "autoscale_is_enabled" {
+  type        = bool
+  description = "Enable the Ocean Kubernetes Auto Scaler."
+  default     = true
+}
+
+variable "autoscale_is_auto_config" {
+  type        = bool
+  description = "Automatically configure and optimize headroom resources."
+  default     = true
+}
+
+variable "enable_automatic_and_manual_headroom" {
+  type        = bool
+  description = "Enables automatic and manual headroom to work in parallel. When set to false, automatic headroom overrides all other headroom definitions manually configured, whether they are at cluster or VNG level."
+  default     = true
+}
