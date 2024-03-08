@@ -254,7 +254,7 @@ variable "kubelet_graceful_node_shutdown" {
   })
   default = {
     shutdownGracePeriod             = "60s"
-    shutdownGracePeriodCriticalPods = "45s"
+    shutdownGracePeriodCriticalPods = "20s"
   }
   description = "Configures graceful node shutdown.  Set to 0 to disable graceful node shutdowns https://kubernetes.io/docs/concepts/architecture/nodes/#graceful-node-shutdown"
 }
