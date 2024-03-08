@@ -246,3 +246,15 @@ variable "enable_automatic_and_manual_headroom" {
   description = "Enables automatic and manual headroom to work in parallel. When set to false, automatic headroom overrides all other headroom definitions manually configured, whether they are at cluster or VNG level."
   default     = true
 }
+
+variable "kubelet_graceful_node_shutdown" {
+  type = object({
+    shutdownGracePeriod             = string
+    shutdownGracePeriodCriticalPods = string
+  })
+  default = {
+    shutdownGracePeriod             = "60s"
+    shutdownGracePeriodCriticalPods = "20s"
+  }
+  description = "Configures graceful node shutdown.  Set to 0 to disable graceful node shutdowns https://kubernetes.io/docs/concepts/architecture/nodes/#graceful-node-shutdown"
+}
