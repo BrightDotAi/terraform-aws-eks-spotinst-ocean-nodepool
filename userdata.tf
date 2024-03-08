@@ -34,6 +34,8 @@ locals {
     kubelet_extra_args              = local.kubelet_extra_args
     bootstrap_extra_args            = var.bootstrap_additional_options == null ? "" : var.bootstrap_additional_options
     after_cluster_joining_userdata  = var.after_cluster_joining_userdata == null ? "" : var.after_cluster_joining_userdata
+    shutdownGracePeriod             = var.kubelet_graceful_node_shutdown.shutdownGracePeriod
+    shutdownGracePeriodCriticalPods = var.kubelet_graceful_node_shutdown.shutdownGracePeriodCriticalPods
   }
 
   cluster_data = {
