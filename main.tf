@@ -51,6 +51,7 @@ resource "spotinst_ocean_aws" "this" {
 
     roll_config {
       batch_size_percentage = var.update_policy_batch_size_percentage
+      launch_spec_ids = var.update_policy_launch_spec_ids
     }
   }
 

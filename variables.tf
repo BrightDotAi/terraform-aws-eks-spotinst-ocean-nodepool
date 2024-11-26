@@ -258,3 +258,9 @@ variable "kubelet_graceful_node_shutdown" {
   }
   description = "Configures graceful node shutdown.  Set to 0 to disable graceful node shutdowns https://kubernetes.io/docs/concepts/architecture/nodes/#graceful-node-shutdown"
 }
+
+variable "update_policy_launch_spec_ids" {
+  type = list(string)
+  default = null
+  description = "List of virtual node group identifiers to be rolled during update."
+}
