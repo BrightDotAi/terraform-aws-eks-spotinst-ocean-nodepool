@@ -24,7 +24,7 @@ resource "spotinst_ocean_aws" "this" {
   subnet_ids                  = local.subnet_ids
   image_id                    = local.ami_id
   whitelist                   = var.instance_types
-  root_volume_size            = var.disk_size
+  root_volume_size            = length(var.block_device_mappings) > 0 ? null : var.disk_size
   security_groups             = local.security_group_ids
   key_name                    = var.ec2_ssh_key
   iam_instance_profile        = var.instance_profile == null ? join("", aws_iam_instance_profile.worker.*.name) : var.instance_profile
@@ -49,6 +49,8 @@ resource "spotinst_ocean_aws" "this" {
         encrypted             = block_device_mappings.value.encrypted
         volume_type           = block_device_mappings.value.volume_type
         volume_size           = block_device_mappings.value.volume_size
+        throughput            = block_device_mappings.value.throughput
+        iops                  = block_device_mappings.value.iops
 
         dynamic "dynamic_volume_size" {
           for_each = block_device_mappings.value.dynamic_volume_size == null ? [] : [block_device_mappings.value.dynamic_volume_size]
