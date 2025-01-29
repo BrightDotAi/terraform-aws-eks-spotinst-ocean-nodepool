@@ -51,8 +51,7 @@ resource "spotinst_ocean_aws" "this" {
         volume_size           = block_device_mappings.value.volume_size
 
         dynamic "dynamic_volume_size" {
-          for_each = block_device_mappings.value.dynamic_volume_size == null ? [] :
-            [block_device_mappings.value.dynamic_volume_size]
+          for_each = block_device_mappings.value.dynamic_volume_size == null ? [] : [block_device_mappings.value.dynamic_volume_size]
 
           content {
             base_size              = dynamic_volume_size.value.base_size
