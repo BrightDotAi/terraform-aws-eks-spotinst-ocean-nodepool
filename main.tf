@@ -40,6 +40,40 @@ resource "spotinst_ocean_aws" "this" {
     }
   }
 
+  dynamic "block_device_mappings" {
+    for_each = var.block_device_mappings
+    content {
+      device_name = block_device_mappings.key
+      ebs {
+        delete_on_termination = block_device_mappings.value.delete_on_termination
+        encrypted             = block_device_mappings.value.encrypted
+        volume_type           = block_device_mappings.value.volume_type
+        volume_size           = block_device_mappings.value.volume_size
+
+        dynamic "dynamic_volume_size" {
+          for_each = block_device_mappings.value.dynamic_volume_size == null ? [] :
+            [block_device_mappings.value.dynamic_volume_size]
+
+          content {
+            base_size              = dynamic_volume_size.value.base_size
+            resource               = dynamic_volume_size.value.resource
+            size_per_resource_unit = dynamic_volume_size.value.size_per_resource_unit
+          }
+        }
+
+        dynamic "dynamic_iops" {
+          for_each = block_device_mappings.value.dynamic_iops == null ? [] : [block_device_mappings.value.dynamic_iops]
+
+          content {
+            base_size              = dynamic_iops.value.base_size
+            resource               = dynamic_iops.value.resource
+            size_per_resource_unit = dynamic_iops.value.size_per_resource_unit
+          }
+        }
+      }
+    }
+  }
+
   autoscaler {
     autoscale_is_enabled                 = var.autoscale_is_enabled
     autoscale_is_auto_config             = var.autoscale_is_auto_config
@@ -51,7 +85,7 @@ resource "spotinst_ocean_aws" "this" {
 
     roll_config {
       batch_size_percentage = var.update_policy_batch_size_percentage
-      launch_spec_ids = var.update_policy_launch_spec_ids
+      launch_spec_ids       = var.update_policy_launch_spec_ids
     }
   }
 
