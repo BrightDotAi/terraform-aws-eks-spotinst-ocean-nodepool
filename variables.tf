@@ -72,7 +72,7 @@ variable "disk_size" {
 }
 
 variable "instance_types" {
-  type        = list(string)
+  type = list(string)
   default     = null
   description = <<-EOT
     List of instance type to use for this node group. Defaults to null, which allows all instance types.
@@ -93,17 +93,17 @@ variable "fallback_to_ondemand" {
 
 variable "subnet_ids" {
   description = "A list of subnet IDs to launch resources in"
-  type        = list(string)
+  type = list(string)
 }
 
 variable "security_group_ids" {
-  type        = list(string)
+  type = list(string)
   description = "List of security groups that will be attached to the autoscaling group"
 }
 
 variable "existing_workers_role_policy_arns" {
-  type        = list(string)
-  default     = []
+  type = list(string)
+  default = []
   description = "List of existing policy ARNs that will be attached to the workers default role on creation"
 }
 
@@ -119,7 +119,8 @@ variable "ami_release_version" {
   default     = null
   validation {
     condition = (
-      length(compact([var.ami_release_version])) == 0 ? true : length(regexall("^\\d+\\.\\d+\\.\\d+-\\d+$", var.ami_release_version)) == 1
+      length(compact([var.ami_release_version])) == 0 ? true :
+      length(regexall("^\\d+\\.\\d+\\.\\d+-\\d+$", var.ami_release_version)) == 1
     )
     error_message = "Var ami_release_version, if supplied, must be like  \"1.16.13-20200821\" (no \"v\")."
   }
@@ -134,7 +135,7 @@ variable "ami_type" {
   default     = "AL2_x86_64"
   validation {
     condition = (
-      contains(["AL2_x86_64", "AL2_x86_64_GPU", "AL2_ARM_64"], var.ami_type)
+    contains(["AL2_x86_64", "AL2_x86_64_GPU", "AL2_ARM_64"], var.ami_type)
     )
     error_message = "Var ami_type must be one of \"AL2_x86_64\", \"AL2_x86_64_GPU\", and \"AL2_ARM_64\"."
   }
@@ -147,25 +148,26 @@ variable "kubernetes_version" {
   default     = null
   validation {
     condition = (
-      length(compact([var.kubernetes_version])) == 0 ? true : length(regexall("^\\d+\\.\\d+$", var.kubernetes_version)) == 1
+      length(compact([var.kubernetes_version])) == 0 ? true :
+      length(regexall("^\\d+\\.\\d+$", var.kubernetes_version)) == 1
     )
     error_message = "Var kubernetes_version, if supplied, must be like \"1.16\" (no patch level)."
   }
 }
 
 variable "kubernetes_labels" {
-  type        = map(string)
+  type = map(string)
   description = <<-EOT
     Key-value mapping of Kubernetes labels. Only labels that are applied with the EKS API are managed by this argument.
     Other Kubernetes labels applied to the EKS Node Group will not be managed.
     EOT
-  default     = {}
+  default = {}
 }
 
 variable "kubernetes_taints" {
-  type        = map(string)
+  type = map(string)
   description = "Key-value mapping of Kubernetes taints."
-  default     = {}
+  default = {}
 }
 
 variable "kubelet_additional_options" {
@@ -261,6 +263,30 @@ variable "kubelet_graceful_node_shutdown" {
 
 variable "update_policy_launch_spec_ids" {
   type = list(string)
-  default = null
+  default     = null
   description = "List of virtual node group identifiers to be rolled during update."
+}
+
+variable "block_device_mappings" {
+  type = map(object({
+    delete_on_termination = optional(bool, true)
+    encrypted             = optional(bool, true)
+    volume_type           = string
+    volume_size           = number
+    throughput            = optional(number, null)
+    iops                  = optional(number, null)
+
+    dynamic_volume_size = optional(object({
+      base_size              = number
+      resource               = string
+      size_per_resource_unit = number
+    }), null)
+
+    dynamic_iops = optional(object({
+      base_size              = number
+      resource               = string
+      size_per_resource_unit = number
+    }), null)
+  }))
+  default = {}
 }
