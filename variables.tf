@@ -72,7 +72,7 @@ variable "disk_size" {
 }
 
 variable "instance_types" {
-  type = list(string)
+  type        = list(string)
   default     = null
   description = <<-EOT
     List of instance type to use for this node group. Defaults to null, which allows all instance types.
@@ -93,17 +93,17 @@ variable "fallback_to_ondemand" {
 
 variable "subnet_ids" {
   description = "A list of subnet IDs to launch resources in"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "security_group_ids" {
-  type = list(string)
+  type        = list(string)
   description = "List of security groups that will be attached to the autoscaling group"
 }
 
 variable "existing_workers_role_policy_arns" {
-  type = list(string)
-  default = []
+  type        = list(string)
+  default     = []
   description = "List of existing policy ARNs that will be attached to the workers default role on creation"
 }
 
@@ -135,7 +135,7 @@ variable "ami_type" {
   default     = "AL2_x86_64"
   validation {
     condition = (
-    contains(["AL2_x86_64", "AL2_x86_64_GPU", "AL2_ARM_64"], var.ami_type)
+      contains(["AL2_x86_64", "AL2_x86_64_GPU", "AL2_ARM_64"], var.ami_type)
     )
     error_message = "Var ami_type must be one of \"AL2_x86_64\", \"AL2_x86_64_GPU\", and \"AL2_ARM_64\"."
   }
@@ -156,18 +156,18 @@ variable "kubernetes_version" {
 }
 
 variable "kubernetes_labels" {
-  type = map(string)
+  type        = map(string)
   description = <<-EOT
     Key-value mapping of Kubernetes labels. Only labels that are applied with the EKS API are managed by this argument.
     Other Kubernetes labels applied to the EKS Node Group will not be managed.
     EOT
-  default = {}
+  default     = {}
 }
 
 variable "kubernetes_taints" {
-  type = map(string)
+  type        = map(string)
   description = "Key-value mapping of Kubernetes taints."
-  default = {}
+  default     = {}
 }
 
 variable "kubelet_additional_options" {
@@ -262,7 +262,7 @@ variable "kubelet_graceful_node_shutdown" {
 }
 
 variable "update_policy_launch_spec_ids" {
-  type = list(string)
+  type        = list(string)
   default     = null
   description = "List of virtual node group identifiers to be rolled during update."
 }
@@ -289,4 +289,16 @@ variable "block_device_mappings" {
     }), null)
   }))
   default = {}
+}
+
+variable "autoscaler_max_vcpu" {
+  type        = number
+  description = "The maximum cpu in vCPU units that can be allocated to the cluster."
+  default     = 1000
+}
+
+variable "autoscaler_max_memory_gib" {
+  type        = number
+  description = "The maximum memory in GiB units that can be allocated to the cluster."
+  default     = 4000
 }
